@@ -1,0 +1,10 @@
+node_modules
+.git
+.env
+*.log
+database.sqlite
+uploads
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
