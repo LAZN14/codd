@@ -5,6 +5,7 @@ const { connectDatabase } = require('./backend/config/database');
 const { initContacts } = require('./scripts/init-contacts');
 const { initProjects } = require('./scripts/init-projects');
 const { initUsers } = require('./scripts/init-users');
+const { exec } = require('child_process');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -82,8 +83,22 @@ async function startServer() {
     // Инициализируем проекты
     await initProjects();
     
-    // Инициализируем пользователей
-    await initUsers();
+    // Исправляем базу данных
+    console.log('🔄 Исправление базы данных...');
+    const { spawn } = require('child_process');
+    const fixDb = spawn('node', ['scripts/fix-database.js'], { stdio: 'inherit' });
+    
+    await new Promise((resolve, reject) => {
+      fixDb.on('close', (code) => {
+        if (code === 0) {
+          console.log('✅ База данных исправлена');
+          resolve();
+        } else {
+          console.log('⚠️ Предупреждение: не удалось исправить БД, продолжаем...');
+          resolve();
+        }
+      });
+    });
     
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Сервер запущен на порту ${PORT}`);
