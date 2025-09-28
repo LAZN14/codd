@@ -76,15 +76,20 @@ router.post('/login', async (req, res) => {
 router.get('/verify', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
-    req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : null
+    const token = authHeader ? authHeader.replace('Bearer ', '') : null;
+    
+    console.log('🔍 Проверка токена:', { authHeader, token: token ? 'ЕСТЬ' : 'НЕТ' });
     
     if (!token) {
+      console.log('❌ Токен не предоставлен');
       return res.status(401).json({ error: 'Токен не предоставлен' });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
+    console.log('✅ Токен валиден:', decoded);
     res.json({ valid: true, user: decoded });
   } catch (error) {
+    console.log('❌ Ошибка проверки токена:', error.message);
     res.status(401).json({ error: 'Недействительный токен' });
   }
 });
@@ -93,7 +98,7 @@ router.get('/verify', async (req, res) => {
 router.get('/profile', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
-    req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : null
+    const token = authHeader ? authHeader.replace('Bearer ', '') : null;
     
     if (!token) {
       return res.status(401).json({ error: 'Токен не предоставлен' });
