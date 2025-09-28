@@ -23,7 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             showLoading(true);
             
-            const response = await fetch('/api/auth/login', {
+            // Определяем базовый URL
+            const baseUrl = window.location.origin;
+            const response = await fetch(`${baseUrl}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
