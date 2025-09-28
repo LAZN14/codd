@@ -1,7 +1,7 @@
 // Умный поиск по сайту
 class SmartSearch {
     constructor() {
-        this.apiBase = 'http://localhost:3000';
+        this.apiBase = '';
         this.searchInput = null;
         this.suggestionsContainer = null;
         this.isSearching = false;

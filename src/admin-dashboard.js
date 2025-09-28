@@ -1,7 +1,7 @@
 // Admin Dashboard JavaScript
 class AdminDashboard {
     constructor() {
-        this.apiBase = 'http://localhost:3000';
+        this.apiBase = '';
         this.currentUser = null;
         this.userRole = localStorage.getItem('userRole') || 'guest';
         this.finesAllRows = null;

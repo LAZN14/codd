@@ -1,7 +1,7 @@
 // Contacts Page JavaScript
 class ContactsPage {
     constructor() {
-        this.apiBase = 'http://localhost:3000';
+        this.apiBase = '';
         this.init();
     }
 

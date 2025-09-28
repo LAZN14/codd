@@ -1690,7 +1690,7 @@ loadTransportData();
 // Функция загрузки данных транспорта
 async function loadTransportData() {
   try {
-    const response = await fetch('http://localhost:3000/api/transport?limit=6');
+    const response = await fetch('/api/transport?limit=6');
     if (!response.ok) {
       throw new Error('Ошибка загрузки данных транспорта');
     }
@@ -1916,7 +1916,7 @@ async function refreshTransportData() {
   container.innerHTML = '<div class="loading-spinner">Загрузка маршрутов...</div>';
   
   try {
-    const response = await fetch('http://localhost:3000/api/transport?limit=10');
+    const response = await fetch('/api/transport?limit=10');
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
