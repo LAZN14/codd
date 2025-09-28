@@ -1,7 +1,7 @@
 // Умный поиск по сайту
 class SmartSearch {
     constructor() {
-        this.apiBase = '';
+        this.apiBase = 'https://codd-production.up.railway.app';
         this.searchInput = null;
         this.suggestionsContainer = null;
         this.isSearching = false;

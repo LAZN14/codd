@@ -1,7 +1,7 @@
 // Contacts Page JavaScript
 class ContactsPage {
     constructor() {
-        this.apiBase = '';
+        this.apiBase = 'https://codd-production.up.railway.app';
         this.init();
     }
 

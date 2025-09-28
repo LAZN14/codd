@@ -1,7 +1,7 @@
 // Admin Dashboard JavaScript
 class AdminDashboard {
     constructor() {
-        this.apiBase = '';
+        this.apiBase = 'https://codd-production.up.railway.app';
         this.currentUser = null;
         this.userRole = localStorage.getItem('userRole') || 'guest';
         this.finesAllRows = null;

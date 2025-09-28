@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             showLoading(true);
             
-            // Определяем базовый URL
-            const baseUrl = window.location.origin;
+            // ПРИНУДИТЕЛЬНО используем Railway URL
+            const baseUrl = 'https://codd-production.up.railway.app';
             const response = await fetch(`${baseUrl}/api/auth/login`, {
                 method: 'POST',
                 headers: {
