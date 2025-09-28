@@ -83,22 +83,22 @@ async function startServer() {
     // Инициализируем проекты
     await initProjects();
     
-    // Исправляем базу данных
-    console.log('🔄 Исправление базы данных...');
-    const { spawn } = require('child_process');
-    const fixDb = spawn('node', ['scripts/fix-database.js'], { stdio: 'inherit' });
-    
-    await new Promise((resolve, reject) => {
-      fixDb.on('close', (code) => {
-        if (code === 0) {
-          console.log('✅ База данных исправлена');
+    // Простое исправление базы данных
+    console.log('🔄 Простое исправление базы данных...');
+    try {
+      const { exec } = require('child_process');
+      await new Promise((resolve, reject) => {
+        exec('node scripts/simple-fix.js', (error, stdout, stderr) => {
+          if (stdout) console.log(stdout);
+          if (stderr) console.log(stderr);
+          if (error) console.log('⚠️ Ошибка исправления БД:', error.message);
           resolve();
-        } else {
-          console.log('⚠️ Предупреждение: не удалось исправить БД, продолжаем...');
-          resolve();
-        }
+        });
       });
-    });
+      console.log('✅ База данных исправлена');
+    } catch (error) {
+      console.log('⚠️ Предупреждение: не удалось исправить БД, продолжаем...');
+    }
     
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Сервер запущен на порту ${PORT}`);

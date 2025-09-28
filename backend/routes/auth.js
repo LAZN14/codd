@@ -29,14 +29,21 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('🔐 Попытка входа:', { username, password: '***' });
     
     const user = await User.findOne({ where: { username } });
+    console.log('👤 Найден пользователь:', user ? user.username : 'НЕТ');
+    
     if (!user) {
+      console.log('❌ Пользователь не найден');
       return res.status(401).json({ error: 'Неверные учетные данные' });
     }
 
     const isValidPassword = await user.checkPassword(password);
+    console.log('🔑 Пароль валиден:', isValidPassword);
+    
     if (!isValidPassword) {
+      console.log('❌ Неверный пароль');
       return res.status(401).json({ error: 'Неверные учетные данные' });
     }
 
