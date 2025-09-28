@@ -83,21 +83,44 @@ async function startServer() {
     // Инициализируем проекты
     await initProjects();
     
-    // Простое исправление базы данных
-    console.log('🔄 Простое исправление базы данных...');
+    // Исправляем базу данных прямо здесь
+    console.log('🔄 Исправление базы данных...');
     try {
-      const { exec } = require('child_process');
-      await new Promise((resolve, reject) => {
-        exec('node scripts/simple-fix.js', (error, stdout, stderr) => {
-          if (stdout) console.log(stdout);
-          if (stderr) console.log(stderr);
-          if (error) console.log('⚠️ Ошибка исправления БД:', error.message);
-          resolve();
+      const User = require('./backend/models/User');
+      
+      // Проверяем, есть ли пользователи
+      const userCount = await User.count();
+      console.log('👥 Пользователей в БД:', userCount);
+      
+      if (userCount === 0) {
+        console.log('🔄 Создание тестовых пользователей...');
+        
+        // Создаем админа
+        await User.create({
+          username: 'admin',
+          email: 'admin@codd.smolensk.ru',
+          password: 'admin123',
+          fullName: 'Администратор системы',
+          role: 'admin',
+          isActive: true
         });
-      });
+        console.log('✅ Администратор создан');
+        
+        // Создаем редактора
+        await User.create({
+          username: 'editor',
+          email: 'editor@codd.smolensk.ru',
+          password: 'editor123',
+          fullName: 'Редактор контента',
+          role: 'operator',
+          isActive: true
+        });
+        console.log('✅ Редактор создан');
+      }
+      
       console.log('✅ База данных исправлена');
     } catch (error) {
-      console.log('⚠️ Предупреждение: не удалось исправить БД, продолжаем...');
+      console.log('⚠️ Ошибка исправления БД:', error.message);
     }
     
     app.listen(PORT, '0.0.0.0', () => {
