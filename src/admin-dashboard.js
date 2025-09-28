@@ -9,6 +9,28 @@ class AdminDashboard {
         this.currentSection = 'dashboard';
         this.charts = {};
         this.isInitialized = false;
+        
+        // Проверяем аутентификацию
+        this.checkAuth();
+    }
+
+    checkAuth() {
+        const token = localStorage.getItem('adminToken');
+        const userRole = localStorage.getItem('userRole');
+        
+        if (!token || !userRole) {
+            console.log('❌ Нет токена или роли, перенаправляем на логин');
+            window.location.href = 'admin.html';
+            return;
+        }
+        
+        if (userRole !== 'admin' && userRole !== 'operator') {
+            console.log('❌ Недостаточно прав доступа');
+            window.location.href = 'admin.html';
+            return;
+        }
+        
+        console.log('✅ Аутентификация успешна');
         this.init();
     }
 
@@ -199,11 +221,9 @@ class AdminDashboard {
     }
 
     async init() {
-        console.log('AdminDashboard init started');
-        await this.checkAuth();
-        console.log('Auth check complete');
+        console.log('🚀 AdminDashboard init started');
         this.setupEventListeners();
-        console.log('Event listeners setup complete');
+        console.log('✅ Event listeners setup complete');
         this.setupRoleBasedAccess();
         console.log('Role-based access setup complete');
         this.showSection('dashboard');

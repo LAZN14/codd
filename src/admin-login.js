@@ -4,7 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const notifications = document.getElementById('notifications');
 
     // Check if user is already logged in
-    if (localStorage.getItem('adminToken')) {
+    const token = localStorage.getItem('adminToken');
+    const userRole = localStorage.getItem('userRole');
+    
+    if (token && userRole && (userRole === 'admin' || userRole === 'operator')) {
+        console.log('✅ Пользователь уже авторизован, перенаправляем в дашборд');
         window.location.href = 'admin-dashboard.html';
         return;
     }
