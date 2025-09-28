@@ -83,44 +83,45 @@ async function startServer() {
     // Инициализируем проекты
     await initProjects();
     
-    // Исправляем базу данных прямо здесь
-    console.log('🔄 Исправление базы данных...');
+    // ПРИНУДИТЕЛЬНО пересоздаем базу данных
+    console.log('🔄 ПРИНУДИТЕЛЬНОЕ пересоздание базы данных...');
     try {
+      const { sequelize } = require('./backend/config/database');
       const User = require('./backend/models/User');
       
-      // Проверяем, есть ли пользователи
-      const userCount = await User.count();
-      console.log('👥 Пользователей в БД:', userCount);
+      // ПРИНУДИТЕЛЬНО пересоздаем все таблицы
+      console.log('🔄 Удаляем старые таблицы...');
+      await sequelize.sync({ force: true });
+      console.log('✅ Таблицы пересозданы с правильной схемой');
       
-      if (userCount === 0) {
-        console.log('🔄 Создание тестовых пользователей...');
-        
-        // Создаем админа
-        await User.create({
-          username: 'admin',
-          email: 'admin@codd.smolensk.ru',
-          password: 'admin123',
-          fullName: 'Администратор системы',
-          role: 'admin',
-          isActive: true
-        });
-        console.log('✅ Администратор создан');
-        
-        // Создаем редактора
-        await User.create({
-          username: 'editor',
-          email: 'editor@codd.smolensk.ru',
-          password: 'editor123',
-          fullName: 'Редактор контента',
-          role: 'operator',
-          isActive: true
-        });
-        console.log('✅ Редактор создан');
-      }
+      // Создаем пользователей
+      console.log('🔄 Создание пользователей...');
       
-      console.log('✅ База данных исправлена');
+      // Админ
+      await User.create({
+        username: 'admin',
+        email: 'admin@codd.smolensk.ru',
+        password: 'admin123',
+        fullName: 'Администратор системы',
+        role: 'admin',
+        isActive: true
+      });
+      console.log('✅ Администратор создан');
+      
+      // Редактор
+      await User.create({
+        username: 'editor',
+        email: 'editor@codd.smolensk.ru',
+        password: 'editor123',
+        fullName: 'Редактор контента',
+        role: 'operator',
+        isActive: true
+      });
+      console.log('✅ Редактор создан');
+      
+      console.log('🎉 База данных ПОЛНОСТЬЮ исправлена!');
     } catch (error) {
-      console.log('⚠️ Ошибка исправления БД:', error.message);
+      console.log('❌ КРИТИЧЕСКАЯ ошибка БД:', error.message);
     }
     
     app.listen(PORT, '0.0.0.0', () => {
